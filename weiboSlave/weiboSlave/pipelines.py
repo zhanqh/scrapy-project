@@ -7,7 +7,7 @@
 import pymongo
 
 
-class WeibomasterPipeline(object):
+class WeiboslavePipeline(object):
     def __init__(self):
         connection = pymongo.MongoClient('10.104.152.137', 27017)
         tdb = connection.weibo
