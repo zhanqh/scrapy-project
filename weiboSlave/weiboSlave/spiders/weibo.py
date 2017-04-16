@@ -2,7 +2,7 @@
 import scrapy
 import json
 from scrapy_redis.spiders import RedisSpider
-from weiboMaster.items import WeibomasterItem
+from weiboSlave.items import WeiboslaveItem
 from redis import Redis
 
 
@@ -14,7 +14,7 @@ class WeiboSpider(RedisSpider):
     def parse(self, response):
         if response.status is 200:
             self.logger.info('Parse function called on %s', response.url)
-            item = WeibomasterItem()
+            item = WeiboslaveItem()
             rep = json.loads(response.body_as_unicode())
             print(response.url + '  crawl done!')
             for data in rep['data']:
