@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import scrapy
 from scrapy_redis.spiders import RedisSpider
-from emscnu.items import EmscnuItem
+from weiboMaster.items import WeibomasterItem
 from redis import Redis
 
 
