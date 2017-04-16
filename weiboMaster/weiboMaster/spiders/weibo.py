@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import scrapy
+import json
 from scrapy_redis.spiders import RedisSpider
 from weiboMaster.items import WeibomasterItem
 from redis import Redis
@@ -11,9 +12,9 @@ class WeiboSpider(RedisSpider):
     # allowed_domains = ["http://m.weibo.cn"]
 
     def parse(self, response):
-        if response.status is 20:
+        if response.status is 200:
             self.logger.info('Parse function called on %s', response.url)
-            item = WeiboItem()
+            item = WeibomasterItem()
             rep = json.loads(response.body_as_unicode())
             print(response.url + '  crawl done!')
             for data in rep['data']:
