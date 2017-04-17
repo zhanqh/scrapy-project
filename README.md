@@ -1,1 +1,1 @@
-# weiboScrapy
+# Scrapy crawler project
