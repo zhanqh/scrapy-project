@@ -14,7 +14,7 @@ BOT_NAME = 'tibetan'
 SPIDER_MODULES = ['tibetan.spiders']
 NEWSPIDER_MODULE = 'tibetan.spiders'
 
-MONGO_URI = 'localhost'
+MONGO_URI = '10.104.152.137'
 MONGO_DB = 'tibetan'
 MONGO_TB = 'travelogue'
 

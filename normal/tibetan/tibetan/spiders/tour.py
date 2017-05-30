@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import scrapy
 from tibetan.items import TibetanItem
+from twisted.internet.error import TimeoutError, TCPTimedOutError
 
 
 class TourSpider(scrapy.Spider):
@@ -15,7 +16,11 @@ class TourSpider(scrapy.Spider):
             # 山东论坛 http://club.autohome.com.cn/bbs/thread-a-100023-36274620-1.html
             # 自驾游论坛 http://club.autohome.com.cn/bbs/thread-o-200042-36309451-1.html
             # 高尔夫论坛 http://club.autohome.com.cn/bbs/thread-c-871-35065778-1.html
-            yield scrapy.Request(url, callback=self.parse_detail)
+            yield scrapy.Request(url, callback=self.parse_detail, errback=self.errback_timeout)
+
+        next_page = response.urljoin(response.xpath('//a[@class="afpage"]/@href').extract_first())
+        yield scrapy.Request(next_page, callback=self.parse, errback=self.errback_timeout)
+        
 
     def parse_detail(self, response):
         article_url = response.url
@@ -34,3 +39,11 @@ class TourSpider(scrapy.Spider):
             except NameError:
                 self.logger.debug(field, '该字段没有定义')
         yield travelogue_item
+
+
+    def errback_timeout(self, failure):
+        self.logger.debug(repr(failure))
+        if failure.check(TimeoutError, TCPTimedOutError):
+            request = failure.request
+            self.logger.debug('连接超时 %s', request.url)
+            yield scrapy.Request(request.url, callback=self.parse_detail, errback=self.errback_timeout)
